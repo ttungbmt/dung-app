@@ -47,11 +47,15 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 
     $kqs = collect(KetquaDm::all()->toArray())->map(fn($i) => (object)$i);
     foreach ($kqs as $k => $i){
-        $keywords = Str::of($i->ten_dm)->slug('* +', false)->prepend('+')->append('*');
+//        $keywords = Str::of($i->ten_dm)->slug('* +', false)->prepend('+')->append('*');
 
         $r = DB::table('danhmuc');
-        if($i->keywords) $keywords = $i->keywords;
-        $r->whereRaw("MATCH (ten_dm) AGAINST ('{$keywords}' IN BOOLEAN MODE)");
+        if($i->keywords) {
+            $r->whereRaw("MATCH (ten_dm) AGAINST ('{$i->keywords}' IN BOOLEAN MODE)");
+        } else {
+            $keywords = $i->ten_dm;
+            $r->whereRaw("MATCH (ten_dm) AGAINST ('{$keywords}' IN NATURAL LANGUAGE MODE)");
+        }
 
         $r = $r->take($limit)->get();
         $kqs[$k]->kqs = $r;

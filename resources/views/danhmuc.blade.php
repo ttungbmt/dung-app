@@ -7,6 +7,8 @@
         <button class="btn-save btn btn-success">Lưu kết quả</button>
     </div>
     <form id="dm-form" action="/save-kq" method="POST" x-data="kqApp()">
+{{--        <div x-text="JSON.stringify(items)"></div>--}}
+
         @csrf
         <table class="table">
             <thead>
@@ -36,7 +38,11 @@
                     <td :class="i.line == 1 ? `font-bold`: ''" x-text="i.ten_dm"></td>
                     <td :class="i.line == 1 ? `font-bold`: ''" x-text="i.ten_bv"></td>
                     <td :class="i.line == 1 ? `font-bold`: ''" x-text="i.gia"></td>
-                    <td class="text-center"><input type="checkbox" :name="`kqs[${i.id}][ids][]`" :value="i.kq_id" :checked="_.includes(i.ids, _.toString(i.kq_id))"></td>
+                    <td class="text-center">
+                        <template x-if="i.ten_bv">
+                            <input type="checkbox" :name="`kqs[${i.id}][ids][]`" :value="i.kq_id" :checked="_.includes(i.ids, _.toString(i.kq_id))">
+                        </template>
+                    </td>
                 </tr>
             </template>
 
@@ -64,12 +70,14 @@
                             ..._.omit(l1, ['id']), line: '1', count: kqs.length ? kqs.length : 1,
                             kq_id: l1.id,
                             ten_dm_kt: value.ten_dm,
-                            index: key
+                            ten_dm: _.isEmpty(l1) ? '' : value.ten_dm,
+                            index: key,
                         })
 
                         kqs.slice(1).map(i => {
                             result.push({...i, ids: value.ids, id: value.id, kq_id: i.id,line: 'n'})
                         })
+                        console.log(result)
                     }, [])
                 },
 

@@ -80,14 +80,16 @@ Route::post('save-kq', function (\Illuminate\Http\Request $request){
 });
 
 Route::any('ketqua', function (\Illuminate\Http\Request $request){
+    $limit = $request->input('limit', 3);
+
     $data = DB::select('SELECT kq.*, dm.ten_dm dm, ten_bv, gia FROm ketqua_dm kq LEFT JOIN danhmuc dm ON JSON_CONTAINS(kq.ids, CONCAT(\'"\', dm.id,\'"\')) ORDER BY id');
-    $data = collect($data)->groupBy('id')->map(function ($i){
+    $data = collect($data)->groupBy('id')->map(function ($i) use($limit){
         $value = [
             'id' => data_get($i, '0.id'),
             'ten_dm' => data_get($i, '0.ten_dm'),
         ];
 
-        $i->take(3)->map(function ($j, $k) use(&$value){
+        $i->take($limit)->map(function ($j, $k) use(&$value){
             $value['ten_bv_'.($k+1)] = $j->ten_bv;
             $value['gia_'.($k+1)] = $j->gia;
         });

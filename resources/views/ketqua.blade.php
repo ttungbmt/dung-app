@@ -6,7 +6,7 @@
     @endphp
     <div class="flex justify-end">
         <div class="mr-2"><input id="inp-limit" type="text" class="form-control" placeholder="Số lượng bệnh viện" value="{{request('limit')}}"></div>
-        <a href="/ketqua?export=true" class="btn-save btn btn-success mb-6">Tải xuống</a>
+        <a href="/ketqua?export=true&limit={{count($range)}}" class="btn-save btn btn-success mb-6">Tải xuống</a>
     </div>
 
     <table class="table">
@@ -14,9 +14,9 @@
         <tr>
             <th>#</th>
             <th>Danh mục kỹ thuật</th>
-            @foreach($range as $i)
-                <th>BV</th>
-                <th>Giá</th>
+            @foreach($range as $k => $i)
+                <th>Giá {{$k+1}}</th>
+                <th>BV {{$k+1}}</th>
             @endforeach
         </tr>
         </thead>
@@ -27,8 +27,8 @@
                 <td>{{$i['ten_dm']}}</td>
                 @foreach($range as $i1)
                     @php $price = data_get($i, 'gia_'.$i1) @endphp
-                    <td>{{data_get($i, 'ten_bv_'.$i1)}}</td>
                     <td>{{$price ? number_format($price) : ''}}</td>
+                    <td>{{data_get($i, 'ten_bv_'.$i1)}}</td>
                 @endforeach
 
             </tr>

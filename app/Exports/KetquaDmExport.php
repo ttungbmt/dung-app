@@ -10,16 +10,8 @@ class KetquaDmExport implements FromArray, WithHeadings
 
     public function headings(): array
     {
-        return [
-            '#',
-            'Danh mục KT',
-            'BV',
-            'Giá',
-            'BV',
-            'Giá',
-            'BV',
-            'Giá',
-        ];
+        $limit = request()->input('limit', 3);
+        return collect(range(1, $limit))->map(fn($v, $k) => ['Giá_'.$v, 'BV_'.$v])->prepend(['#', 'Danh mục KT'])->collapse()->all();
     }
 
     public function __construct(array $items)

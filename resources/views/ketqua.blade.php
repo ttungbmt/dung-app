@@ -27,7 +27,7 @@
                 <td>{{$i['ten_dm']}}</td>
                 @foreach($range as $i1)
                     @php $price = data_get($i, 'gia_'.$i1) @endphp
-                    <td>{{$price ? number_format($price) : ''}}</td>
+                    <td>{{$price ? $price : ''}}</td>
                     <td>{{data_get($i, 'ten_bv_'.$i1)}}</td>
                 @endforeach
 

@@ -73,7 +73,7 @@
         </div>
     </div>
 
-    <div class="toast bg-success position-absolute m-3 top-0 end-0 text-white font-semibold" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast bg-success position-absolute m-3 bottom-0 start-0 text-white font-semibold" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="d-flex">
             <div class="toast-body">
                 Đã lưu thành công

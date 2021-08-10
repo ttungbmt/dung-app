@@ -128,13 +128,13 @@
                 },
 
                 onSubmit() {
-                    this.load = true
+                    this.loading = true
                     $.post(`/save-kq`, {
                         _token: $('input[name="_token"]').val(),
                         url: $('#dm-form').serialize()
                     }, data => {
                         if(data.status === 'OK') $('.toast').toast('show')
-                        this.load = false
+                        this.loading = false
                     })
                 }
             }

@@ -66,17 +66,18 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 
 
 Route::post('save-kq', function (\Illuminate\Http\Request $request){
-    $data = $request->input('kqs', []);
-    KetquaDm::whereNotIn('id', array_keys($data))->update(['ids' => null]);
+    parse_str($_POST['url'], $data);
 
-    foreach ($data as $id => $v){
+    KetquaDm::whereNotIn('id', array_keys($data['kqs']))->update(['ids' => null]);
+
+    foreach ($data['kqs'] as $id => $v){
         $model = KetquaDm::find($id);
         $model->fill($v);
         $model->save();
     }
 
-
-    return redirect('/ketqua');
+    return ['status' => 'OK'];
+//    return redirect('/ketqua');
 });
 
 Route::any('ketqua', function (\Illuminate\Http\Request $request){

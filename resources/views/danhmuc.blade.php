@@ -130,7 +130,7 @@
                 onSubmit() {
                     this.loading = true
                     $.post(`/save-kq`, {
-                        _token: $('input[name="_token"]').val(),
+                        // _token: $('input[name="_token"]').val(),
                         url: $('#dm-form').serialize()
                     }, data => {
                         if(data.status === 'OK') $('.toast').toast('show')

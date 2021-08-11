@@ -103,7 +103,7 @@
                             ..._.omit(l1, ['id']), line: '1', count: kqs.length ? kqs.length : 1,
                             kq_id: l1.id,
                             ten_dm_kt: value.ten_dm,
-                            ten_dm: _.isEmpty(l1) ? '' : value.ten_dm,
+                            ten_dm: _.isEmpty(l1) ? '' : l1.ten_dm,
                             index: key,
                         })
 

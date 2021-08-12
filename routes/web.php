@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\KetquaDm1Export;
 use App\Exports\KetquaDmExport;
 use App\Models\KetquaDm;
 use Illuminate\Support\Facades\DB;
@@ -83,8 +84,9 @@ Route::post('save-kq', function (\Illuminate\Http\Request $request){
 Route::any('ketqua', function (\Illuminate\Http\Request $request){
     $limit = $request->input('limit', 3);
 
-    $data = DB::select('SELECT kq.*, dm.ten_dm dm, ten_bv, gia FROm ketqua_dm kq LEFT JOIN danhmuc dm ON JSON_CONTAINS(kq.ids, CONCAT(\'"\', dm.id,\'"\')) ORDER BY id');
-    $data = collect($data)->groupBy('id')->map(function ($i) use($limit){
+    $qdata = DB::select('SELECT kq.*, dm.ten_dm dm, ten_bv, gia FROm ketqua_dm kq LEFT JOIN danhmuc dm ON JSON_CONTAINS(kq.ids, CONCAT(\'"\', dm.id,\'"\')) ORDER BY id');
+
+    $data = collect($qdata)->groupBy('id')->map(function ($i) use($limit){
         $value = [
             'id' => data_get($i, '0.id'),
             'ten_dm' => data_get($i, '0.ten_dm'),
@@ -98,7 +100,32 @@ Route::any('ketqua', function (\Illuminate\Http\Request $request){
     })->values();
 
     if($request->has('export')){
-        $export = new KetquaDmExport($data->all());
+        if($request->input('type') == 2) {
+            $renew = 0;
+            $index = 1;
+            $data = collect($qdata)->map(function ($v, $k) use(&$renew, &$index){
+                if($renew === $v->id){
+                    $v->ten_dm = '';
+                    $stt = '';
+                } else {
+                    $stt = $index++;
+                }
+
+                $renew = $v->id;
+
+                return [
+                    'stt' => $stt,
+                    'ten_dm' => $v->ten_dm,
+                    'dm' => $v->dm,
+                    'ten_bv' => $v->ten_bv,
+                    'gia' => $v->gia,
+                ];
+            });
+
+            $export = new KetquaDm1Export($data->all());
+        } else {
+            $export = new KetquaDmExport($data->all());
+        }
         return Excel::download($export, 'ketqua_dm.xlsx');
     }
 

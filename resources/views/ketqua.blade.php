@@ -6,7 +6,8 @@
     @endphp
     <div class="flex justify-end">
         <div class="mr-2"><input id="inp-limit" type="text" class="form-control" placeholder="Số lượng bệnh viện" value="{{request('limit')}}"></div>
-        <a href="/ketqua?export=true&limit={{count($range)}}" class="btn-save btn btn-success mb-6">Tải xuống</a>
+        <a href="/ketqua?export=true&limit={{count($range)}}" class="btn-save btn btn-success mb-6 mr-2">Tải xuống</a>
+        <a href="/ketqua?export=true&type=2" class="btn-save btn btn-primary mb-6">Đối chiếu</a>
     </div>
 
     <table class="table">
